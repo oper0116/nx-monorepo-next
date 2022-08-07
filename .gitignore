@@ -4,7 +4,7 @@
 /dist
 /tmp
 /out-tsc
-/apps/next01/.next
+/apps/**/.next
 
 # dependencies
 node_modules
