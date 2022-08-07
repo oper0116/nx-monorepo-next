@@ -1,0 +1,106 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/next01",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/next:build",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "root": "apps/next01",
+        "outputPath": "dist/apps/next01"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "tmp/apps/next01"
+        },
+        "production": {}
+      },
+      "dependsOn": [
+        "build-custom-server"
+      ]
+    },
+    "serve": {
+      "executor": "@nrwl/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "next01:build",
+        "dev": true,
+        "customServerTarget": "next01:serve-custom-server"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "next01:build:development",
+          "dev": true,
+          "customServerTarget": "next01:serve-custom-server:development"
+        },
+        "production": {
+          "buildTarget": "next01:build:production",
+          "dev": false,
+          "customServerTarget": "next01:serve-custom-server:production"
+        }
+      }
+    },
+    "export": {
+      "executor": "@nrwl/next:export",
+      "options": {
+        "buildTarget": "next01:build:production"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/next01"
+      ],
+      "options": {
+        "jestConfig": "apps/next01/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/next01/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "build-custom-server": {
+      "executor": "@nrwl/js:tsc",
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/next01",
+        "main": "apps/next01/server/main.ts",
+        "tsConfig": "apps/next01/tsconfig.server.json",
+        "clean": false,
+        "assets": []
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve-custom-server": {
+      "executor": "@nrwl/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "next01:build-custom-server"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "next01:build-custom-server:development"
+        },
+        "production": {
+          "buildTarget": "next01:build-custom-server:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
